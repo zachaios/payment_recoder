@@ -1,0 +1,6 @@
+com\hsbc\controller\demo\Hello.class
+com\hsbc\handler\AmountHolder.class
+com\hsbc\handler\RecordHandler.class
+com\hsbc\entity\CurrencyAmount.class
+com\hsbc\handler\RecordHandler$1.class
+com\hsbc\enums\CurrencyEnum.class

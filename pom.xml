@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.hsbc</groupId>
+    <artifactId>payment-recoder</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <dependencies>
+        <dependency>
+            <groupId>io.muserver</groupId>
+            <artifactId>mu-server</artifactId>
+            <version>0.72.15</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <!-- 依赖的jar的目录前缀 -->
+                            <classpathPrefix>../lib</classpathPrefix>
+                            <addClasspath>true</addClasspath>
+                            <!-- 项目启动类 -->
+                            <mainClass>com.hsbc.controller.demo.Hello</mainClass>
+                        </manifest>
+                    </archive>
+                    <includes>
+                        <!-- 只打包指定目录的文件 -->
+                        <include>com/hsbc/**</include>
+                    </includes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <configuration>
+                    <!--生成的项目的目录位置，这里的client是项目的名称，你可以根据你的需要自己随便命名-->
+                    <assembleDirectory>${project.build.directory}/payment-recoder</assembleDirectory>
+                    <!--依赖包存放的目录-->
+                    <repositoryName>lib</repositoryName>
+                    <!--lib下直接存放jar，没有路径文件夹（如com/apache)，如果没有这个选项则放在lib下的jar包会被com/apache类似的多层文件夹包裹起来-->
+                    <repositoryLayout>flat</repositoryLayout>
+                    <!--指定配置文件目录-->
+                    <configurationDirectory>conf</configurationDirectory>
+                    <!-- 是否拷贝配置文件到上面的目录中 -->
+                    <copyConfigurationDirectory>true</copyConfigurationDirectory>
+                    <!-- 从哪里拷贝配置文件 (默认src/main/config) -->
+                    <configurationSourceDirectory>src/main/resources</configurationSourceDirectory>
+                    <!-- 对配置目录开启资源过滤 -->
+                    <filterConfigurationDirectory>true</filterConfigurationDirectory>
+                    <includeConfigurationDirectoryInClasspath>true</includeConfigurationDirectoryInClasspath>
+                    <!--<useWildcardClassPath>true</useWildcardClassPath>-->
+                    <binFileExtensions>
+                        <unix>.sh</unix>
+                    </binFileExtensions>
+                    <platforms>
+                        <platform>windows</platform>
+                        <platform>unix</platform>
+                    </platforms>
+                    <encoding>UTF-8</encoding>
+                    <programs>
+                        <program>
+                            <!--指定主类，脚本名。会生成shell/bat两种类型,也可用platforms指定运行平台-->
+                            <mainClass>com.hsbc.controller.demo.Hello</mainClass>
+                            <!-- 生成的脚本文件的名称，比如start.sh,你也可以根据你的需要命名成其他名字 -->
+                            <id>startup</id>
+                            <!--java启动参数-->
+                            <jvmSettings>
+                                <extraArguments>
+                                    <!--自定义应用名字-->
+                                    <extraArgument>-Dapp.init.name="payment-recoder"</extraArgument>
+                                    <extraArgument>-server</extraArgument>
+                                    <extraArgument>-Xmx2G</extraArgument>
+                                    <extraArgument>-Xms2G</extraArgument>
+                                </extraArguments>
+                            </jvmSettings>
+                        </program>
+                    </programs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

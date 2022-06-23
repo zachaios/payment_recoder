@@ -1,0 +1,3 @@
+USD 1
+CNY 2
+HKD 3
