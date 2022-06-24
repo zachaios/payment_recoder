@@ -99,7 +99,7 @@ public class RecordHandler {
     /**
      * 校验、保存数据
      */
-    public void save(CurrencyAmount currencyAndAmount){
+    public String save(CurrencyAmount currencyAndAmount){
         // 获取存储的map
         ConcurrentHashMap<String, Integer> payment = AmountHolder.getPayment();
         // 判断货币是否存在
@@ -108,13 +108,21 @@ public class RecordHandler {
             Integer amountAll = payment.get(currencyAndAmount.getCurrency());
             int newAmountAll = amountAll.intValue() + currencyAndAmount.getAmount();
             if(newAmountAll < 0){
-                System.out.println(currencyAndAmount.getCurrency()+"货币金额不足，请重新键入");
+                String msg = currencyAndAmount.getCurrency()+"货币金额不足，请重新键入";
+                System.out.println(msg);
+                return msg;
             }else{
                 payment.put( currencyAndAmount.getCurrency(),  newAmountAll);
+                return "保存成功";
             }
         }else{
             // 货币不存在，则存入
-            payment.put( currencyAndAmount.getCurrency(),currencyAndAmount.getAmount() );
+            if(currencyAndAmount.getAmount() >0){
+                payment.put( currencyAndAmount.getCurrency(),currencyAndAmount.getAmount() );
+            }else {
+                return "金额不能小于0";
+            }
+            return "保存成功";
         }
     }
 
@@ -146,6 +154,9 @@ public class RecordHandler {
             if(e.getValue().intValue()!=0){
                 paymentStr.append("\r\n");
                 paymentStr.append(e.getKey()+"总额："+e.getValue());
+            }else {
+                paymentStr.append("\r\n");
+                paymentStr.append("暂无数据");
             }
         });
         return paymentStr.toString();
@@ -165,7 +176,13 @@ public class RecordHandler {
                 paymentStr.append(currency);
                 paymentStr.append(":");
                 paymentStr.append(amount);
+            }else{
+                paymentStr.append("\r\n");
+                paymentStr.append("赞无数据");
             }
+        }else{
+            paymentStr.append("\r\n");
+            paymentStr.append("赞无数据");
         }
         return paymentStr.toString();
     }

@@ -46,8 +46,8 @@ public class Hello {
                         operator = "";
                     }
                     CurrencyAmount currencyAmount = new CurrencyAmount(currency + " " +operator+ amount);
-                    handler.save(currencyAmount);
-                    resp.write(handler.getPrintPaymentString(payment));
+                    String msg = handler.save(currencyAmount);
+                    resp.write(msg+" \n "+handler.getPrintPaymentString(payment));
                 })
                 .start();
         System.out.println("Server started at " + server.uri().resolve("/recoder/all"));
